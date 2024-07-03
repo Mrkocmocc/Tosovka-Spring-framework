@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <meta charset='utf-8'>
+    <meta http-equiv='X-UA-Compatible' content='IE=edge'>
+    <title>Регистрация</title>
+    <meta name='viewport' content='width=device-width, initial-scale=1'>
+</head>
+
+<body>
+    <div class="container">
+        <h1>Регистрация</h1>
+        <div th:if="${error}" class="error">
+            Неверные данные.
+        </div>
+        <form method="POST" th:action="@{/register/post}" id="registerForm">
+            <label for="username">Имя пользозователя: </label>
+            <input type="text" name="username" id="username" /><br />
+            <label for="username">Почта: </label>
+            <input type="email" name="email" id="email" /><br />
+            <label for="password">Пароль: </label>
+            <input type="password" name="password" id="password" /><br />
+            <input type="submit" value="Регистрация" />
+            <p>Есть аккаунт? Нажми
+                <a th:href="@{/login}">сюда</a> для входа.
+            </p>
+        </form>
+    </div>
+</body>
+
+</html>
