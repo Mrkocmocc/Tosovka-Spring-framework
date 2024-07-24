@@ -1,7 +1,7 @@
 package com.example.Tosovka_Spring_framework_.entity;
 
-import org.springframework.context.annotation.Configuration;
-
+import jakarta.persistence.Basic;
+import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;
@@ -16,27 +16,24 @@ import lombok.RequiredArgsConstructor;
 
 @Entity
 @Data
-@Configuration
-@Table(name = "user_data")
+@Table(name = "images")
 @RequiredArgsConstructor
-public class User {
+public class Images {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "user_id")
+    @Column(name = "image_id")
     private Long id;
 
-    @Column(name = "username")
-    private String username;
+    @ManyToOne(fetch = FetchType.EAGER, cascade = CascadeType.REFRESH)
+    @JoinColumn(name = "event_id", nullable = false)
+    private Events events;
 
-    @Column(name = "password")
-    private String password;
+    @ManyToOne(fetch = FetchType.EAGER, cascade = CascadeType.REFRESH)
+    @JoinColumn(name = "user_id", nullable = false)
+    private User user;
 
-    @Column(name = "email")
-    private String email;
-
-    @ManyToOne(fetch = FetchType.EAGER)
-    @JoinColumn(name = "role_id", nullable = false, referencedColumnName = "role_id")
-    private Role role;
-
+    @Basic
+    @Column(name = "image", nullable = false, columnDefinition = "bytea")
+    private byte[] image;
 }

@@ -1,8 +1,6 @@
 package com.example.Tosovka_Spring_framework_.service;
 
-import java.util.HashSet;
 import java.util.List;
-import java.util.Set;
 
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -27,18 +25,16 @@ public class UserService {
 
     public boolean saveUser(String username, String password, String email) {
         User user = new User();
-        Set<Role> roles = new HashSet<>();
-
+        Role role = roleRepository.findByName("ROLE_USER");
         if (userRepository.findByUsername(username) != null || userRepository.findByEmail(email) != null)
             return false;
 
-        roles.add(roleRepository.findByName("ROLE_USER"));
         user.setUsername(username);
         user.setPassword(passwordEncoder.encode(password));
         user.setEmail(email);
-        user.setRoles(roles);
+        user.setRole(role);
         userRepository.save(user);
         return true;
     }
-
+    
 }

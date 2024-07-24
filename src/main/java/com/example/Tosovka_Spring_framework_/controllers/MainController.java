@@ -10,7 +10,18 @@ import lombok.RequiredArgsConstructor;
 public class MainController {
 
     @GetMapping("/")
-    public String mainPage(){
+    public String mainPage() {
         return "main";
     }
+
+    @GetMapping("/search")
+    public String searchPage() {
+        return "search";
+    }
+
+    @GetMapping("/profile")
+    public String profilePage() {
+        return "profile";
+    }
+
 }

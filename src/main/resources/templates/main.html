@@ -1,14 +1,94 @@
 <!DOCTYPE html>
 <html>
+
 <head>
     <meta charset='utf-8'>
     <meta http-equiv='X-UA-Compatible' content='IE=edge'>
-    <title>Main</title>
+    <title>ToSovka</title>
     <meta name='viewport' content='width=device-width, initial-scale=1'>
-    <link rel='stylesheet' type='text/css' media='screen' href='main.css'>
-    <script src='main.js'></script>
+    <link rel='stylesheet' type='text/css' media='screen' href='../static/main.css'>
 </head>
+
 <body>
-    <h1>Goodmorning Vietnam</h1>
+    <header class="header">
+        <a href="#" class="logo">ToSovka</a>
+        <div class="search-bar">
+            <input type="text" placeholder="Поиск...">
+        </div>
+        <nav class="navbar">
+            <a th:href="@{/}">Главная</a>
+            <a th:href="@{/search}">Найти Ивент</a>
+            <a th:href="@{/create}">Создать Ивент</a>
+            <a href="#">Мои Ивенты</a>
+            <button class="btnLogin">Логин</button>
+        </nav>
+    </header>
+
+    <main>
+        <div class="container">
+            <img class="image" src="https://via.placeholder.com/1000x1000" alt="">
+            <div class="hero-text">
+                <h1>Добро пожаловать в ToSovka!</h1>
+                <p>Открывайте для себя лучшие мероприятия в вашем городе и присоединяйтесь к веселью! <br>Найдите
+                    мероприятия, которые вам по душе, от непринужденных встреч до грандиозных балов.</p>
+                <button class="start">Найти</button>
+            </div>
+        </div>
+    </main>
+
+    <div class="layout">
+        <div class="layout-top">
+            <h1 class="tagline">Находите, создавайте и делитесь захватывающими событиями</h1>
+            <p class="description">Наша платформа позволяет легко находить интересные события,
+                происходящие рядом с вами, и участвовать в них.
+            </p>
+        </div>
+
+        <div class="layout-blocks">
+            <div class="block">
+                <img src="https://placehold.co/1280x800" class="image">
+                <h1>Открывайте для себя события</h1>
+                <p>Ознакомьтесь с разнообразными ивентами, происходящими в вашем городе.</p>
+            </div>
+            <div class="block">
+                <img src="https://placehold.co/1280x800" class="image">
+                <h1>Создавать события</h1>
+                <p>Легко создавайте свои собственные мероприятия и управляйте ими с помощью наших интуитивно
+                    понятных
+                    инструментов для создания мероприятий.</p>
+            </div>
+            <div class="block">
+                <img src="https://placehold.co/1280x800" class="image">
+                <h1>Делитесь событиями</h1>
+                <p>Рассказывайте о своих мероприятиях, делясь ими со своими друзьями.</p>
+            </div>
+        </div>
+    </div>
+
+    <footer class="footer">
+        <div class="footer-block">
+            <div class="row">
+                <div class="column">
+                    <h4>ToSovka</h4>
+                    <a>Сайт для создания и поиска интересных мероприятий</a>
+                </div>
+                <div class="column">
+                    <h4>Навигация</h4>
+                    <ul>
+                        <li><a href="#">Главная</a></li>
+                        <li><a href="#">Найти Ивент</a></li>
+                        <li><a href="#">Создать Ивент</a></li>
+                    </ul>
+                </div>
+                <div class="column">
+                    <h4>Контакты</h4>
+                    <ul>
+                        <li><a href="https://t.me/Num_Dominance">Telegram разработчика</a></li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </footer>
 </body>
+
 </html>

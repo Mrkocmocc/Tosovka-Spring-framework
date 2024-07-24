@@ -1,10 +1,9 @@
 package com.example.Tosovka_Spring_framework_.entity;
 
-import org.springframework.context.annotation.Configuration;
+import java.time.LocalDateTime;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
-import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
@@ -16,27 +15,27 @@ import lombok.RequiredArgsConstructor;
 
 @Entity
 @Data
-@Configuration
-@Table(name = "user_data")
+@Table(name = "comments")
 @RequiredArgsConstructor
-public class User {
-
+public class Comments {
+    
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "user_id")
+    @Column(name = "comm_id")
     private Long id;
 
-    @Column(name = "username")
-    private String username;
+    @ManyToOne
+    @JoinColumn(name = "event_id")
+    private Events events;
 
-    @Column(name = "password")
-    private String password;
+    @ManyToOne
+    @JoinColumn(name = "user_id")
+    private User user;
 
-    @Column(name = "email")
-    private String email;
+    @Column(name = "comment_text")
+    private String commentText;
 
-    @ManyToOne(fetch = FetchType.EAGER)
-    @JoinColumn(name = "role_id", nullable = false, referencedColumnName = "role_id")
-    private Role role;
+    @Column(name = "comment_date")
+    private LocalDateTime commentDate;
 
 }

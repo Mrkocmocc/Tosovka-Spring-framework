@@ -1,0 +1,122 @@
+.event-container {
+    margin-top: 80px;
+    padding: 15px;
+    display: flex;
+}
+
+.left-column {
+    min-width: 50%;
+    max-width: 50%;
+    position: relative;
+}
+
+.right-column {
+    margin-top: 60px;
+}
+
+.left-column img {
+    width: 100%;
+    padding: 15px;
+    position: absolute;
+    left: 0;
+    top: 0;
+    opacity: 0;
+    transition: all 0.3s ease;
+}
+
+.left-column img {
+    opacity: 1;
+}
+
+.event-description {
+    border-bottom: 1px solid #E1E8EE;
+    margin-bottom: 20px;
+}
+
+.event-description span {
+    font-size: 12px;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    text-decoration: none;
+}
+
+.event-description h1 {
+    font-weight: 300;
+    font-size: 52px;
+    letter-spacing: -2px;
+}
+
+.event-text {
+    margin-top: 20px;
+    font-size: 18px;
+    font-weight: 300;
+    line-height: 24px;
+}
+
+.event-type {
+    font-size: 18px;
+}
+
+.event-date {
+    margin-top: 5px;
+    font-size: 18px;
+}
+
+.event-location {
+    margin-top: 10px;
+    font-size: 18px;
+}
+
+.come-btn {
+    width: 100px;
+    height: 40px;
+    background: #28A745;
+    border-radius: 6px;
+    font-size: 1.1em;
+    color: #FFFFFF;
+    text-decoration: none;
+    padding: 12px 30px;
+    transition: all .5s;
+}
+
+.come-btn:hover {
+    background: #24973f;
+}
+
+.comments-section {
+    position: relative;
+    top: 150px;
+    margin-left: 170px;
+    margin-bottom: 170px;
+}
+
+.comments-section h3 {
+    font-size: 27px;
+}
+
+.comments-list {
+    font-size: 18px;
+    margin-top: 25px;
+}
+
+.comments-list:last-child {
+    border-bottom: none;
+}
+
+.comments-form {
+    margin-top: 20px;
+    align-items: center;
+}
+
+.comments-form textarea {
+    max-width: 50%;
+    min-width: 50%;
+    font-size: 18px;
+    padding: 10px;
+    margin-bottom: 10px;
+    resize: none;
+}
+
+.comments-form input {
+    padding: 10px 20px;
+}

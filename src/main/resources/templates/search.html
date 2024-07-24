@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset='utf-8'>
+    <meta http-equiv='X-UA-Compatible' content='IE=edge'>
+    <title>Поиск</title>
+    <meta name='viewport' content='width=device-width, initial-scale=1'>
+
+    <link rel='stylesheet' type='text/css' media='screen' href='../static/search.css'>
+    <link rel='stylesheet' type='text/css' media='screen' href='../static/main.css'>
+</head>
+
+<body>
+    <header class="header">
+        <a href="#" class="logo">ToSovka</a>
+        <div class="search-bar">
+            <input type="text" placeholder="Поиск...">
+        </div>
+        <nav class="navbar">
+            <a th:href="@{/}">Главная</a>
+            <a th:href="@{/search}">Найти Ивент</a>
+            <a th:href="@{/create}">Создать Ивент</a>
+            <a href="#">Мои Ивенты</a>
+            <button class="btnLogin">Логин</button>
+        </nav>
+    </header>
+
+    
+    <div class="event-search-container">
+        <div class="filter">
+            <h2>Фильтр</h2>
+            <label for="date">Дата</label>
+            <input type="date" id="date">
+            <label for="type">Тип мероприятия</label>
+            <select id="type">
+                <option value="все">Все</option>
+                <option value="концерт">Концерт</option>
+                <option value="выставка">Выставка</option>
+                <option value="фестиваль">Фестиваль</option>
+            </select>
+        </div>
+
+
+        <div class="content">
+            <div class="card">
+                <div class="date">15.10.2023</div>
+                <img src="https://placehold.co/1280x800" alt="Мероприятие 1">
+                <div class="type">Концерт</div>
+                <!-- TODO: Ограничить у текста длину -->
+                <div class="title"><a href="#">Название мероприятия 1 qweqwqwe qweqw awdwq qwea wadwadwa</a> </div>
+                <div class="location">Ул.Пушкина </div>
+                <!-- TODO: Ограничить у текста длину -->
+                <div class="description">Короткое описание мероприятия 1.</div>
+            </div>
+            <div class="card">
+                <div class="date">20.10.2023</div>
+                <img src="https://placehold.co/1280x800" alt="Мероприятие 2">
+                <div class="type">Выставка</div>
+                <div class="title"><a href="#">Название мероприятия 2 </a> </div>
+                <div class="location">Ул.Пушкина </div>
+                <div class="description">Лишь многие известные личности будут ограничены исключительно образом мышления!
+                    Высокий уровень вовлечения представителей целевой аудитории является четким доказательством простого
+                    факта: консультация с широким активом является качественно новой ступенью экономической</div>
+            </div>
+            <div class="card">
+                <div class="date">25.10.2023</div>
+                <img src="https://placehold.co/1280x800" alt="Мероприятие 3">
+                <div class="type">Фестиваль</div>
+                <div class="title"><a href="#">Название мероприятия 3 qweqwqwe qweqw awdwq2 qwea wadwadwa</a> </div>
+                <div class="location">Ул.Пушкина </div>
+                <div class="description">Лишь многие известные личности будут ограничены исключительно образом мышления!
+                    Высокий уровень вовлечения представителей целевой аудитории является четким доказательством простого
+                    факта: консультация с широким активом является качественно новой ступенью экономической</div>
+            </div>
+        </div>
+    </div>
+
+</body>
+
+
+</html>
