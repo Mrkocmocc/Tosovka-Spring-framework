@@ -14,11 +14,6 @@ public class MainController {
         return "main";
     }
 
-    @GetMapping("/search")
-    public String searchPage() {
-        return "search";
-    }
-
     @GetMapping("/profile")
     public String profilePage() {
         return "profile";

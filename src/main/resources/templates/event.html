@@ -12,10 +12,13 @@
 
 <body>
     <header class="header">
-        <a href="#" class="logo">ToSovka</a>
-        <div class="search-bar">
-            <input type="text" placeholder="Поиск...">
-        </div>
+        <a th:href="@{/}" class="logo">ToSovka</a>
+        <form th:action="@{/search}" method="get">
+            <div class="search-bar">
+                <input type="text" name="title" placeholder="Поиск...">
+                <button type="submit" class="search-button">Найти</button>
+            </div>
+        </form>
         <nav class="navbar">
             <a th:href="@{/}">Главная</a>
             <a th:href="@{/search}">Найти Ивент</a>

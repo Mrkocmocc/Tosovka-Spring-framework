@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset='utf-8'>
+    <meta http-equiv='X-UA-Compatible' content='IE=edge'>
+    <title>Поиск</title>
+    <meta name='viewport' content='width=device-width, initial-scale=1'>
+
+    <link rel='stylesheet' type='text/css' media='screen' href='../static/events.css'>
+    <link rel='stylesheet' type='text/css' media='screen' href='../static/main.css'>
+</head>
+
+<body>
+    <header class="header">
+        <a th:href="@{/}" class="logo">ToSovka</a>
+        <form th:action="@{/search}" method="get">
+            <div class="search-bar">
+                <input type="text" name="title" placeholder="Поиск...">
+                <button type="submit" class="search-button">Найти</button>
+            </div>
+        </form>
+        <nav class="navbar">
+            <a th:href="@{/}">Главная</a>
+            <a th:href="@{/search}">Найти Ивент</a>
+            <a th:href="@{/create}">Создать Ивент</a>
+            <a href="#">Мои Ивенты</a>
+            <button class="btnLogin">Логин</button>
+        </nav>
+    </header>
+
+
+    <div class="event-search-container">
+        <form class="filter" method="get" th:action="@{/search}">
+            <h2>Фильтр</h2>
+            <label for="date">Дата от</label>
+            <input type="date" id="dateFrom" name="dateFrom" th:value="${dateFrom}">
+            <label for="date">до</label>
+            <input type="date" id="dateTo" name="dateTo">
+            <label for="type">Тип мероприятия</label>
+            <!-- TODO: Сохранение выбранного типа -->
+            <select id="type" name="type">
+                <option value="Все">Все</option>
+                <option th:each="types : ${types}" th:text="${types.getTypeName}"></option>
+            </select>
+            <input type="submit" value="Применить">
+        </form>
+
+
+        <!-- TODO: Ограничить у текста длину -->
+        <div class="content">
+            <list th:each="event : ${events}">
+                <div class="card">
+                    <div class="date"
+                        th:text="${#temporals.format(event.eventDate, 'dd MMMM', new java.util.Locale('ru'))}"></div>
+                    <img th:src="@{'/image/' + ${event.id}}">
+                    <div class="type" th:text="${event.getEventType}"></div>
+                    <div class="title"><a th:href="@{/event/{id}(id=${event.id})}" th:text="${event.title}"></a> </div>
+                    <div class="location" th:text="${event.location}"></div>
+                    <div class="description" th:text="${event.description}"></div>
+            </list>
+        </div>
+    </div>
+
+</body>
+
+
+</html>

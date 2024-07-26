@@ -144,6 +144,21 @@ body {
     color: #333;
 }
 
+.search-bar button[type="submit"] {
+    background-color: #28A745;
+    color: #fff;
+    border: none;
+    border-radius: 5px;
+    padding: 10px 20px;
+    font-size: 16px;
+    cursor: pointer;
+    transition: 0.3s;
+}
+
+.search-bar button[type="submit"]:hover {
+    background-color: #24973f;
+}
+
 .container {
     height: 600px;
     padding: 20px;

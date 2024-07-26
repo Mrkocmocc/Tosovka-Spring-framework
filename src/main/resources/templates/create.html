@@ -12,10 +12,13 @@
 
 <body>
     <header class="header">
-        <a href="#" class="logo">ToSovka</a>
-        <div class="search-bar">
-            <input type="text" placeholder="Поиск...">
-        </div>
+        <a th:href="@{/}" class="logo">ToSovka</a>
+        <form th:action="@{/search}" method="get">
+            <div class="search-bar">
+                <input type="text" name="title" placeholder="Поиск...">
+                <button type="submit" class="search-button">Найти</button>
+            </div>
+        </form>
         <nav class="navbar">
             <a th:href="@{/}">Главная</a>
             <a th:href="@{/search}">Найти Ивент</a>
@@ -29,19 +32,20 @@
     <div class="event-form-container">
         <h1>Организовать событие</h1>
         <form id="eventForm" th:action="@{/create}" method="post" enctype="multipart/form-data">
-            <label for="eventTitle">Назовите своё событие</label>
+            <label for="eventTitle">Название</label>
             <input type="text" id="eventTitle" name="title" maxlength="100" required>
 
-            <label for="eventDescription">Добавьте описание</label>
+            <label for="eventDescription">Описание</label>
             <textarea id="eventDescription" rows="20" cols="50" maxlength="1000" name="description" required></textarea>
 
-            <label for="eventDate">Укажите дату проведения ивента</label>
+            <label for="eventDate">Дата проведения</label>
             <input type="date" id="eventDate" name="eventDate" required>
 
             <!-- TODO: Сделать проверку на локацию -->
-            <label for="eventLocation">Укажите место проведения ивента</label>
+            <label for="eventLocation">Место проведения</label>
             <input type="text" id="location" name="location" required>
 
+            <label for="eventImage">Тип ивента</label>
             <select id="type" name="type">
                 <option th:each = "types : ${types}" th:text="${types.getTypeName}"></option>
             </select>

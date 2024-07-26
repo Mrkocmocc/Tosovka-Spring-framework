@@ -2,6 +2,7 @@ package com.example.Tosovka_Spring_framework_.entity;
 
 import java.time.LocalDate;
 
+import jakarta.persistence.Basic;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;
@@ -37,7 +38,11 @@ public class Events {
     @Column(name = "location", nullable = false)
     private String location;
 
-//  TODO: Create column for main image for event and add it to the database
+    @Basic
+    @Column(name = "main_image", nullable = false)
+    private byte[] mainImage;
+
+    // TODO: Create column check if event is active and add it to the database
 
     @ManyToOne
     @JoinColumn(name = "user_id")
@@ -46,5 +51,9 @@ public class Events {
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "type_id", nullable = false, referencedColumnName = "type_id")
     private Type type;
+
+    public String getEventType() {
+        return type.getTypeName();
+    }
 
 }

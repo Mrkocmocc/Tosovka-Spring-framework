@@ -4,6 +4,7 @@ import java.io.IOException;
 import java.security.Principal;
 import java.time.LocalDate;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -37,10 +38,6 @@ public class EventService {
     @Autowired
     private final ImagesRepository imageRepository;
 
-    public List<Events> getAllEvents() {
-        return eventRepository.findAll();
-    }
-
     public void saveEvent(String eventTitle, String eventDescription, LocalDate eventDate, String eventLocation,
             Principal principal, @RequestParam("file") MultipartFile eventImage, String eventType) throws IOException {
 
@@ -50,7 +47,7 @@ public class EventService {
         event.setDescription(eventDescription);
         event.setEventDate(eventDate);
         event.setLocation(eventLocation);
-        System.out.println("User: " + userRepository.findByUsername(principal.getName()));
+        event.setMainImage(eventImage.getBytes());
         event.setUser(getUserByPrincipal(principal));
         event.setType(type);
 
@@ -63,16 +60,27 @@ public class EventService {
         imageRepository.save(image);
     }
 
+    public List<Events> filterEvents(LocalDate dateFrom, LocalDate dateTo, String eventType, String eventTitle) {
+        List<Events> events = eventRepository.findAll();
+        if (eventTitle != null) {
+            events = eventRepository.findByTitleContains(eventTitle);
+        }
+
+        Type type = typeRepository.findByName(eventType);
+        return events.stream().filter(event -> dateFrom == null || event.getEventDate().isAfter(dateFrom))
+                .filter(event -> dateTo == null || event.getEventDate().isBefore(dateTo))
+                .filter(event -> eventType == null || event.getType().equals(type))
+                .collect(Collectors.toList());
+    }
+
+    public Events getEventById(Long id) {
+        return eventRepository.findById(id).orElse(null);
+    }
+
     public User getUserByPrincipal(Principal principal) {
         if (principal == null)
             return new User();
         return userRepository.findByUsername(principal.getName());
-    }
-
-    public Long getIdUserByPrincipal(Principal principal) {
-        if (principal == null)
-            return 0L;
-        return userRepository.findByUsername(principal.getName()).getId();
     }
 
 }
