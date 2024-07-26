@@ -29,4 +29,8 @@ public class Visits {
     @ManyToOne
     @JoinColumn(name = "user_id")
     private User user;
+
+    public Events getEvents(){
+        return events;
+    }
 }

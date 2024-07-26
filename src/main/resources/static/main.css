@@ -58,7 +58,7 @@ body {
     width: 100%;
 }
 
-.btnLogin {
+/* .btnLogin {
     width: 100px;
     height: 40px;
     background: #28A745;
@@ -76,9 +76,12 @@ body {
 
 .btnLogin:hover {
     background: #24973f;
-}
+} */
+
 
 .footer {
+    width: 100%;
+    margin-top: 100px;
     padding-bottom: 50px;
     background-color: #212529;
 }
@@ -144,7 +147,7 @@ body {
     color: #333;
 }
 
-.search-bar button[type="submit"] {
+.search-bar but ton[type="submit"] {
     background-color: #28A745;
     color: #fff;
     border: none;

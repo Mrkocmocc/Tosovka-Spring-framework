@@ -73,6 +73,10 @@ public class EventService {
                 .collect(Collectors.toList());
     }
 
+    public List<Events> getByUserId(long id){
+        return eventRepository.findByUserId(id);
+    }
+
     public Events getEventById(Long id) {
         return eventRepository.findById(id).orElse(null);
     }

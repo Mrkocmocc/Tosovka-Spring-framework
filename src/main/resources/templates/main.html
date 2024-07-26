@@ -23,7 +23,8 @@
             <a th:href="@{/search}">Найти Ивент</a>
             <a th:href="@{/create}">Создать Ивент</a>
             <a href="#">Мои Ивенты</a>
-            <button class="btnLogin">Логин</button>
+            <a class="btnLogin" th:if="${!isAuthenticated}" th:href="@{/login}">Логин</a>
+            <a class="btnProfile" th:if="${isAuthenticated}" th:href="@{'/profile/' + ${username}}">Профиль</a>
         </nav>
     </header>
 

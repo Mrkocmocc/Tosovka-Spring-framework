@@ -10,6 +10,6 @@ import com.example.Tosovka_Spring_framework_.entity.Events;
 @Repository
 public interface EventsRepository extends JpaRepository<Events, Long> {
     List<Events> findByTitle(String title);
-
     List<Events> findByTitleContains(String title);
+    List<Events> findByUserId(Long id);
 }

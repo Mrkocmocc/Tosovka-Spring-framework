@@ -38,7 +38,8 @@
     transition: .5s
 }
 
-.content {
+
+.content-wrapper {
     padding: 20px;
     display: flex;
     flex-wrap: wrap;
@@ -124,4 +125,12 @@
     -webkit-box-orient: vertical;
     overflow: hidden;
     text-overflow: ellipsis;
+}
+
+.content {
+    display: none;
+}
+
+#profile-info {
+    display: block;
 }

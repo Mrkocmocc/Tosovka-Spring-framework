@@ -24,53 +24,56 @@
             <a th:href="@{/search}">Найти Ивент</a>
             <a th:href="@{/create}">Создать Ивент</a>
             <a href="#">Мои Ивенты</a>
-            <button class="btnLogin">Логин</button>
+            <a class="btnLogin" th:if="${!isAuthenticated}" th:href="@{/login}">Логин</a>
+            <a class="btnProfile" th:if="${isAuthenticated}" th:href="@{'/profile/' + ${username}}">Профиль</a>
         </nav>
     </header>
 
     <!-- Event place -->
-    <div class="event-container">
-        <div class="left-column">
-            <img src="https://placehold.co/1280x800" alt="">
-        </div>
-
-        <div class="right-column">
-            <div class="event-description">
-                <p class="event-type">Тип ивента</p>
-                <p class="event-date">Дата ивента</p>
-                <h1>Название</h1>
-                <p class="event-text">Использование компьютера требует специальных навыков. Людей, достигших в этом
-                    мастерства, иногда называют «хакерами». Обычно хакер – это человек, который создаёт программное
-                    обеспечение на специальном компьютерном языке. Но слово «хакер» также применимо к человеку, который
-                    пытается украсть информацию из компьютерных систем.
-                    Компьютер стал неотъемлемой частью жизни человека. Это обязательный инструмент развития человека.
-                    Каждая большая и малая промышленность компьютеризирована. Компьютеры выполнять свою работу
-                    эффективно, быстро и продуктивно. Без сомнений, они сделали нашу жизнь намного легче.
-                    Компьютеры коренным образом изменили жизнь каждого человека. Несколько десятилетий назад люди даже
-                    не знали ничего об этих электронных устройствах, тогда как в наши дни даже маленький ребенок может
-                    управлять этой машиной. Почти все современные технологии зависит от компьютеров, которые
-                    используются для хранения данных: файлов, секретной информации, банковских операций и прочего.
-                </p>
-                <p class="event-location">Место проведения</p>
+    <section>
+        <div class="event-container">
+            <div class="left-column">
+                <img th:src="@{'/image/' + ${event.id}}" alt="">
             </div>
-            <a href="#" class="come-btn">Пойду</a>
-        </div>
-    </div>
 
+            <div class="right-column">
+                <div class="event-description">
+                    <p class="event-type" th:text="${event.getEventType}">Тип ивента</p>
+                    <p class="event-date"
+                        th:text="${#temporals.format(event.eventDate, 'dd MMMM', new java.util.Locale('ru'))}">Дата
+                        ивента
+                    </p>
+                    <h1 th:text="${event.title}"></h1>
+                    <p class="event-text" th:text="${event.description}">
+                    </p>
+                    <p class="event-location" th:text="${event.location}"></p>
+                </div>
+                <form th:action="@{'/visit/' + ${event.id}}" method="post">
+                    <input th:if="${!isVisited}" th:href="@{'/visit/' + ${event.id}}" type="submit" class="come-btn"
+                        value="Пойду"></input>
+                </form>
+                <form th:action="@{'/visit/' + ${event.id} + '/delete'}" method="post">
+                    <input th:if="${isVisited}" th:href="@{'/visit/' + ${event.id} + '/delete'}" type="submit"
+                        class="come-btn" value="Не пойду"></input>
+                </form>
+            </div>
+        </div>
+    </section>
 
     <!-- TODO: Исправить помойку -->
     <!-- Comments place -->
-    <div class="comments-section">
-        <h3>Комметарии</h3>
-        <div class="comments-list">
-            <p>Комментарий отсутствуют</p>
+    <section>
+        <div class="comments-section">
+            <h3>Комметарии</h3>
+            <div class="comments-list">
+                <p>Комментарий отсутствуют</p>
+            </div>
+            <form class="comments-form">
+                <textarea name="comment" placeholder="Оставить комментарий" required></textarea>
+                <a type="submit" class="come-btn" href="#">Оставить</a>
+            </form>
         </div>
-        <form class="comments-form">
-            <textarea name="comment" placeholder="Оставить комментарий" required></textarea>
-            <input type="submit" value="Отправить" />
-        </form>
-    </div>
-
+    </section>
 
     <!-- Footer -->
     <footer class="footer">
