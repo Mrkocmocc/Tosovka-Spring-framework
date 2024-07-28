@@ -22,9 +22,9 @@
             <a th:href="@{/}">Главная</a>
             <a th:href="@{/search}">Найти Ивент</a>
             <a th:href="@{/create}">Создать Ивент</a>
-            <a href="#">Мои Ивенты</a>
             <a class="btnLogin" th:if="${!isAuthenticated}" th:href="@{/login}">Логин</a>
             <a class="btnProfile" th:if="${isAuthenticated}" th:href="@{'/profile/' + ${username}}">Профиль</a>
+            <a class="btnProfile" th:if="${isAuthenticated}" th:href="@{'/logout'}">Выйти</a>
         </nav>
     </header>
 

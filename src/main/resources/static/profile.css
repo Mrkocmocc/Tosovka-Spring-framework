@@ -132,5 +132,6 @@
 }
 
 #profile-info {
-    display: block;
+    display: flex;
+    gap: 20px;
 }

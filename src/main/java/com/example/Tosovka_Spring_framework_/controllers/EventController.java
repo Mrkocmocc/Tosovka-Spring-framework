@@ -19,8 +19,10 @@ import org.springframework.web.multipart.MultipartFile;
 
 import com.example.Tosovka_Spring_framework_.entity.Events;
 import com.example.Tosovka_Spring_framework_.entity.Type;
+import com.example.Tosovka_Spring_framework_.service.CommentService;
 import com.example.Tosovka_Spring_framework_.service.EventService;
 import com.example.Tosovka_Spring_framework_.service.TypeService;
+import com.example.Tosovka_Spring_framework_.service.UserService;
 import com.example.Tosovka_Spring_framework_.service.VisitService;
 
 import lombok.RequiredArgsConstructor;
@@ -31,12 +33,16 @@ public class EventController {
     private final EventService eventService;
     private final TypeService typeService;
     private final VisitService visitService;
+    private final UserService userService;
+    private final CommentService commentService;
 
     @GetMapping("/create")
     public String createPage(Model model, Principal principal) {
         List<Type> types = typeService.getAllTypes();
+        boolean isAuthenticated = principal != null;
         String username = principal != null ? principal.getName() : "Гость";
         model.addAttribute("username", username);
+        model.addAttribute("isAuthenticated", isAuthenticated);
         model.addAttribute("types", types);
         return "create";
     }
@@ -62,11 +68,12 @@ public class EventController {
         boolean isAuthenticated = principal != null;
         String username = principal != null ? principal.getName() : "Гость";
         boolean isVisited = principal != null && visitService.getVisitByEventIdAndUserId(id,
-                eventService.getUserByPrincipal(principal).getId()) != null  ? true : false;
+                userService.getUserByPrincipal(principal).getId()) != null ? true : false;
         model.addAttribute("username", username);
         model.addAttribute("isVisited", isVisited);
         model.addAttribute("isAuthenticated", isAuthenticated);
         model.addAttribute("event", eventService.getEventById(id));
+        model.addAttribute("comments", commentService.getAllByEventId(eventService.getEventById(id)));
         return "event";
     }
 

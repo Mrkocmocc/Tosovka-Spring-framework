@@ -12,17 +12,16 @@
 <body>
     <div class="container">
         <h1>Регистрация</h1>
-        <!-- TODO: add error -->
-        <div th:if="${error}" class="error">
-            Неверные данные.
+        <div th:if="${error} != null" class="error">
+            Пользователь с этим логином или почтой уже существует.
         </div>
-        <form method="POST" th:action="@{/register/post}" id="registerForm">
+        <form method="POST" th:action="@{/register}" id="registerForm">
             <label for="username">Имя пользозователя: </label>
-            <input type="text" name="username" id="username" /><br />
+            <input type="text" name="username" id="username" required/><br />
             <label for="username">Почта: </label>
-            <input type="email" name="email" id="email" /><br />
+            <input type="email" name="email" id="email" required/><br />
             <label for="password">Пароль: </label>
-            <input type="password" name="password" id="password" /><br />
+            <input type="password" name="password" id="password" required/><br />
             <input type="submit" value="Регистрация" />
             <p>Есть аккаунт? Нажми
                 <a th:href="@{/login}">сюда</a> для входа.

@@ -31,7 +31,7 @@ public class SecurityConfig {
         return http.authorizeHttpRequests((authorize) -> authorize
         .requestMatchers("/","/login/**","/register/**","/static/**","/image/**","/search/**","/events/**", "/event/**", "/profile/**").permitAll()
         .anyRequest().authenticated())
-        .formLogin(login -> login.loginPage("/login").defaultSuccessUrl("/"))
+        .formLogin(login -> login.loginPage("/login").defaultSuccessUrl("/").failureUrl("/login?error=true"))
         .logout((logout) -> logout.logoutUrl("/logout").logoutSuccessUrl("/"))
         .userDetailsService(userDetailsService)
         .build();

@@ -26,23 +26,24 @@ public class Events {
     @Column(name = "event_id", nullable = false)
     private Long id;
 
-    @Column(name = "title", nullable = false)
+    @Column(name = "title", nullable = false, length = 100)
     private String title;
 
-    @Column(name = "description", nullable = false)
+    @Column(name = "description", nullable = false, length = 1100)
     private String description;
 
     @Column(name = "event_date", nullable = false)
     private LocalDate eventDate;
 
-    @Column(name = "location", nullable = false)
+    @Column(name = "location", nullable = false, length = 100)
     private String location;
 
     @Basic
     @Column(name = "main_image", nullable = false)
     private byte[] mainImage;
 
-    // TODO: Create column check if event is active and add it to the database
+    @Column(name = "is_active", nullable = false)
+    private boolean isActive;
 
     @ManyToOne
     @JoinColumn(name = "user_id")

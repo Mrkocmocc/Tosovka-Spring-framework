@@ -12,13 +12,9 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.multipart.MultipartFile;
 
 import com.example.Tosovka_Spring_framework_.entity.Events;
-import com.example.Tosovka_Spring_framework_.entity.Images;
 import com.example.Tosovka_Spring_framework_.entity.Type;
-import com.example.Tosovka_Spring_framework_.entity.User;
 import com.example.Tosovka_Spring_framework_.repositories.EventsRepository;
-import com.example.Tosovka_Spring_framework_.repositories.ImagesRepository;
 import com.example.Tosovka_Spring_framework_.repositories.TypeRepository;
-import com.example.Tosovka_Spring_framework_.repositories.UserRepository;
 
 import lombok.RequiredArgsConstructor;
 
@@ -30,13 +26,13 @@ public class EventService {
     private final EventsRepository eventRepository;
 
     @Autowired
-    private final UserRepository userRepository;
-
-    @Autowired
     private final TypeRepository typeRepository;
 
     @Autowired
-    private final ImagesRepository imageRepository;
+    private final ImageService imageService;
+
+    @Autowired
+    private final UserService userService;
 
     public void saveEvent(String eventTitle, String eventDescription, LocalDate eventDate, String eventLocation,
             Principal principal, @RequestParam("file") MultipartFile eventImage, String eventType) throws IOException {
@@ -48,16 +44,12 @@ public class EventService {
         event.setEventDate(eventDate);
         event.setLocation(eventLocation);
         event.setMainImage(eventImage.getBytes());
-        event.setUser(getUserByPrincipal(principal));
+        event.setUser(userService.getUserByPrincipal(principal));
         event.setType(type);
 
         Events savedEvent = eventRepository.save(event);
 
-        Images image = new Images();
-        image.setImage(eventImage.getBytes());
-        image.setEvents(savedEvent);
-        image.setUser(getUserByPrincipal(principal));
-        imageRepository.save(image);
+        imageService.saveImage(savedEvent, eventImage.getBytes(), principal);
     }
 
     public List<Events> filterEvents(LocalDate dateFrom, LocalDate dateTo, String eventType, String eventTitle) {
@@ -70,21 +62,16 @@ public class EventService {
         return events.stream().filter(event -> dateFrom == null || event.getEventDate().isAfter(dateFrom))
                 .filter(event -> dateTo == null || event.getEventDate().isBefore(dateTo))
                 .filter(event -> eventType == null || event.getType().equals(type))
+                .filter(event -> event.isActive())
                 .collect(Collectors.toList());
     }
 
-    public List<Events> getByUserId(long id){
+    public List<Events> getByUserId(long id) {
         return eventRepository.findByUserId(id);
     }
 
     public Events getEventById(Long id) {
         return eventRepository.findById(id).orElse(null);
-    }
-
-    public User getUserByPrincipal(Principal principal) {
-        if (principal == null)
-            return new User();
-        return userRepository.findByUsername(principal.getName());
     }
 
 }

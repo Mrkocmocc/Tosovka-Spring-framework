@@ -23,9 +23,9 @@
             <a th:href="@{/}">Главная</a>
             <a th:href="@{/search}">Найти Ивент</a>
             <a th:href="@{/create}">Создать Ивент</a>
-            <a href="#">Мои Ивенты</a>
             <a class="btnLogin" th:if="${!isAuthenticated}" th:href="@{/login}">Логин</a>
             <a class="btnProfile" th:if="${isAuthenticated}" th:href="@{'/profile/' + ${username}}">Профиль</a>
+            <a class="btnProfile" th:if="${isAuthenticated}" th:href="@{'/logout'}">Выйти</a>
         </nav>
     </header>
 
@@ -60,17 +60,18 @@
         </div>
     </section>
 
-    <!-- TODO: Исправить помойку -->
     <!-- Comments place -->
     <section>
         <div class="comments-section">
             <h3>Комметарии</h3>
-            <div class="comments-list">
-                <p>Комментарий отсутствуют</p>
-            </div>
-            <form class="comments-form">
+            <list th:each="comment : ${comments}">
+                <div class="comments-list">
+                    <p th:text="${comment.user.getUsername} + ' | '+ ${comment.getCommentText} + ' | ' + ${comment.getCommentDate}"></p>
+                </div>
+            </list>
+            <form class="comments-form" th:if="${isAuthenticated}" th:action="@{'/comment/' + ${event.id} +'/post'}" method="post">
                 <textarea name="comment" placeholder="Оставить комментарий" required></textarea>
-                <a type="submit" class="come-btn" href="#">Оставить</a>
+                <input type="submit" class="come-btn" value="Отправить"></input>
             </form>
         </div>
     </section>

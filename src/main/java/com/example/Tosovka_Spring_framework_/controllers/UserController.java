@@ -1,12 +1,18 @@
 package com.example.Tosovka_Spring_framework_.controllers;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.web.authentication.logout.SecurityContextLogoutHandler;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 
 import com.example.Tosovka_Spring_framework_.service.UserService;
 
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
 
 @Controller
@@ -17,23 +23,35 @@ public class UserController {
     private final UserService userService;
 
     @GetMapping("/login")
-    public String login() {
+    public String login(@RequestParam(value = "error", required = false) String error, Model model) {
+        if (error != null) {
+            model.addAttribute("error", true);
+        }
         return "login";
     }
 
     @GetMapping("/logout")
-    public String logout() {
-        return "logout";
+    public String logout(HttpServletRequest request, HttpServletResponse response, Authentication auth) {
+        if (auth != null) {
+            new SecurityContextLogoutHandler().logout(request, response, auth);
+        }
+        return "redirect:/";
     }
 
     @GetMapping("/register")
-    public String register() {
+    public String register(@RequestParam(value = "error", required = false) String error, Model model) {
+        if (error != null) {
+            model.addAttribute("error", true);
+        }
         return "register";
     }
 
-    @PostMapping("/register/post")
+    @PostMapping("/register")
     public String registerPost(String username, String password, String email) {
-        userService.saveUser(username, password, email);
+        if (!userService.saveUser(username, password, email)) {
+            return "redirect:/register?error=true";
+        }
+
         return "redirect:/login";
     }
 

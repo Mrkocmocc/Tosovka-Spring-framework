@@ -24,18 +24,21 @@ public class VisitService {
     @Autowired
     private final EventService eventService;
 
+    @Autowired
+    private final UserService userService;
+
     public void addVisit(Principal principal, long eventId) {
-        if (!visitRepository.existsByEventsIdAndUserId(eventId, eventService.getUserByPrincipal(principal).getId())) {
+        if (!visitRepository.existsByEventsIdAndUserId(eventId, userService.getUserByPrincipal(principal).getId())) {
             Visits visit = new Visits();
             Events event = eventService.getEventById(eventId);
             visit.setEvents(event);
-            visit.setUser(eventService.getUserByPrincipal(principal));
+            visit.setUser(userService.getUserByPrincipal(principal));
             visitRepository.save(visit);
         }
     }
 
     public void deleteVisit(Principal principal, long eventId) {
-        User user = eventService.getUserByPrincipal(principal);
+        User user = userService.getUserByPrincipal(principal);
         if (visitRepository.existsByEventsIdAndUserId(eventId, user.getId())) {
             visitRepository.delete(getVisitByEventIdAndUserId(eventId, user.getId()));
         }

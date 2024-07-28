@@ -8,6 +8,7 @@
     <meta name='viewport' content='width=device-width, initial-scale=1'>
     <link rel='stylesheet' type='text/css' media='screen' href='../static/main.css'>
     <link rel='stylesheet' type='text/css' media='screen' href='../static/create.css'>
+
 </head>
 
 <body>
@@ -23,8 +24,9 @@
             <a th:href="@{/}">Главная</a>
             <a th:href="@{/search}">Найти Ивент</a>
             <a th:href="@{/create}">Создать Ивент</a>
-            <a href="#">Мои Ивенты</a>
-            <button class="btnLogin">Логин</button>
+            <a class="btnLogin" th:if="${!isAuthenticated}" th:href="@{/login}">Логин</a>
+            <a class="btnProfile" th:if="${isAuthenticated}" th:href="@{'/profile/' + ${username}}">Профиль</a>
+            <a class="btnProfile" th:if="${isAuthenticated}" th:href="@{'/logout'}">Выйти</a>
         </nav>
     </header>
 
@@ -47,7 +49,7 @@
 
             <label for="eventImage">Тип ивента</label>
             <select id="type" name="type">
-                <option th:each = "types : ${types}" th:text="${types.getTypeName}"></option>
+                <option th:each="types : ${types}" th:text="${types.getTypeName}"></option>
             </select>
 
             <label for="eventImage">Загрузите картинку</label>
@@ -81,6 +83,12 @@
             </div>
         </div>
     </footer>
+    <script>
+        const temp = new Date();
+        temp.setDate(temp.getDate() + 1);
+        const today = temp.toISOString().split('T')[0];
+        document.getElementById('eventDate').min = today;
+    </script>
 </body>
 
 </html>

@@ -103,12 +103,17 @@ body {
     font-size: 14px;
     color: #333;
     line-height: 1.2;
-    height: 7em;
+    height: 4.5em;
     display: -webkit-box;
     -webkit-line-clamp: 5;
     -webkit-box-orient: vertical;
     overflow: hidden;
     text-overflow: ellipsis;
+}
+
+.card .creator {
+    margin-top: 6px;
+    margin-left: 10px;
 }
 
 .card a {

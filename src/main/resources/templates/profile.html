@@ -13,7 +13,7 @@
             document.querySelectorAll('.content').forEach(function (content) {
                 content.style.display = 'none';
             });
-            document.getElementById(contentId).style.display = 'block';
+            document.getElementById(contentId).style.display = 'flex';
         }
     </script>
 </head>
@@ -31,33 +31,35 @@
             <a th:href="@{/}">Главная</a>
             <a th:href="@{/search}">Найти Ивент</a>
             <a th:href="@{/create}">Создать Ивент</a>
-            <a href="#">Мои Ивенты</a>
             <a class="btnLogin" th:if="${!isAuthenticated}" th:href="@{/login}">Логин</a>
             <a class="btnProfile" th:if="${isAuthenticated}" th:href="@{'/profile/' + ${username}}">Профиль</a>
+            <a class="btnProfile" th:if="${isAuthenticated}" th:href="@{'/logout'}">Выйти</a>
         </nav>
     </header>
 
     <div class="profile-container">
         <div class="avatar"></div>
-        <div class="nickname">JohnDoe</div>
+        <div class="nickname" th:text="${user.username}"></div>
         <div class="buttons">
             <button onclick="showContent('profile-info')">Профиль</button>
             <button onclick="showContent('visited-events')">Был</button>
         </div>
         <div class="content-wrapper">
-            <list id="profile-info" class="content" th:each="event : ${events}">
-                <div class="card">
-                    <div class="date"
-                        th:text="${#temporals.format(event.eventDate, 'dd MMMM', new java.util.Locale('ru'))}">
+            <div id="profile-info" class="content">
+                <list id="event" class="events" th:each="event : ${events}">
+                    <div class="card">
+                        <div class="date"
+                            th:text="${#temporals.format(event.eventDate, 'dd MMMM', new java.util.Locale('ru'))}">
+                        </div>
+                        <img th:src="@{'/image/' + ${event.id}}">
+                        <div class="type" th:text="${event.getEventType}"></div>
+                        <div class="title"><a th:href="@{/event/{id}(id=${event.id})}" th:text="${event.title}"></a>
+                        </div>
+                        <div class="location" th:text="${event.location}"></div>
+                        <div class="description" th:text="${event.description}"></div>
                     </div>
-                    <img th:src="@{'/image/' + ${event.id}}">
-                    <div class="type" th:text="${event.getEventType}"></div>
-                    <div class="title"><a th:href="@{/event/{id}(id=${event.id})}" th:text="${event.title}"></a>
-                    </div>
-                    <div class="location" th:text="${event.location}"></div>
-                    <div class="description" th:text="${event.description}"></div>
-                </div>
-            </list>
+                </list>
+            </div>
 
             <list id="visited-events" class="content" th:each="visits : ${visits}">
                 <div class="card">

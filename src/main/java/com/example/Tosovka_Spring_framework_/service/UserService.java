@@ -1,5 +1,6 @@
 package com.example.Tosovka_Spring_framework_.service;
 
+import java.security.Principal;
 import java.util.List;
 
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -37,8 +38,17 @@ public class UserService {
         return true;
     }
 
+    public User getUserById(long id) {
+        return userRepository.findById(id).get();
+    }
+
     public User getUserByUsername(String username) {
         return userRepository.findByUsername(username);
     }
-    
+
+    public User getUserByPrincipal(Principal principal) {
+        if (principal == null)
+            return new User();
+        return userRepository.findByUsername(principal.getName());
+    }
 }

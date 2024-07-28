@@ -24,9 +24,9 @@
             <a th:href="@{/}">Главная</a>
             <a th:href="@{/search}">Найти Ивент</a>
             <a th:href="@{/create}">Создать Ивент</a>
-            <a href="#">Мои Ивенты</a>
             <a class="btnLogin" th:if="${!isAuthenticated}" th:href="@{/login}">Логин</a>
             <a class="btnProfile" th:if="${isAuthenticated}" th:href="@{'/profile/' + ${username}}">Профиль</a>
+            <a class="btnProfile" th:if="${isAuthenticated}" th:href="@{'/logout'}">Выйти</a>
         </nav>
     </header>
 
@@ -35,11 +35,10 @@
         <form class="filter" method="get" th:action="@{/search}">
             <h2>Фильтр</h2>
             <label for="date">Дата от</label>
-            <input type="date" id="dateFrom" name="dateFrom" th:value="${dateFrom}">
+            <input type="date" id="dateFrom" name="dateFrom" th:value="${dateFrom}" onchange="updateDateTo()">
             <label for="date">до</label>
             <input type="date" id="dateTo" name="dateTo">
             <label for="type">Тип мероприятия</label>
-            <!-- TODO: Сохранение выбранного типа -->
             <select id="type" name="type">
                 <option value="Все">Все</option>
                 <option th:each="types : ${types}" th:text="${types.getTypeName}"></option>
@@ -48,7 +47,6 @@
         </form>
 
 
-        <!-- TODO: Ограничить у текста длину -->
         <div class="content">
             <list th:each="event : ${events}">
                 <div class="card">
@@ -56,13 +54,29 @@
                         th:text="${#temporals.format(event.eventDate, 'dd MMMM', new java.util.Locale('ru'))}"></div>
                     <img th:src="@{'/image/' + ${event.id}}">
                     <div class="type" th:text="${event.getEventType}"></div>
-                    <div class="title"><a th:href="@{/event/{id}(id=${event.id})}" th:text="${event.title}"></a> </div>
-                    <div class="location" th:text="${event.location}"></div>
-                    <div class="description" th:text="${event.description}"></div>
+                    <div class="title"><a th:href="@{/event/{id}(id=${event.id})}"
+                            th:text="${#strings.abbreviate(event.title, 58)}"></a> </div>
+                    <div class="location" th:text="${#strings.abbreviate(event.location, 30)}"></div>
+                    <div class="description" th:text="${#strings.abbreviate(event.description, 100)}"></div>
+                    <div class="creator"><a th:href="@{'/profile/' + ${event.user.username}}"
+                            th:text="${event.user.getUsername}"></a></div>
             </list>
         </div>
     </div>
+    <script>
+        const temp = new Date();
+        temp.setDate(temp.getDate() + 1);
+        const today = temp.toISOString().split('T')[0];
+        document.getElementById('dateFrom').min = today;
+        function updateDateTo() {
+            var dateFrom = document.getElementById('dateFrom').value;
+            var dateTo = document.getElementById('dateTo');
 
+            if (dateFrom && dateTo.value < dateFrom) {
+                dateTo.min = dateFrom;
+            }
+        }
+    </script>
 </body>
 
 
