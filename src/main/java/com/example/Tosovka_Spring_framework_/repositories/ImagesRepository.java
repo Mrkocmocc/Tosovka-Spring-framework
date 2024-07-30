@@ -11,4 +11,6 @@ import com.example.Tosovka_Spring_framework_.entity.Images;
 public interface ImagesRepository extends JpaRepository<Images, Long> {
     @SuppressWarnings("null")
     Optional<Images> findById(Long id);
+
+    void deleteByEventsId(Long id);
 }

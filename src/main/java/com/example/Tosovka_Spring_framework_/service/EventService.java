@@ -66,6 +66,10 @@ public class EventService {
                 .collect(Collectors.toList());
     }
 
+    public void deleteEvent(Principal principal, long id) {
+        eventRepository.deleteById(id);
+    }
+
     public List<Events> getByUserId(long id) {
         return eventRepository.findByUserId(id);
     }

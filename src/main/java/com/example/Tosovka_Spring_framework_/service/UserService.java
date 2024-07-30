@@ -38,6 +38,17 @@ public class UserService {
         return true;
     }
 
+    public boolean updateUser(Long id, String username, String password, String email) {
+        User user = userRepository.findById(id).get();
+        if (userRepository.findByUsername(username) != null || userRepository.findByEmail(email) != null)
+            return false;
+
+        user.setUsername(username);
+        user.setPassword(password);
+        userRepository.save(user);
+        return true;
+    }
+
     public User getUserById(long id) {
         return userRepository.findById(id).get();
     }

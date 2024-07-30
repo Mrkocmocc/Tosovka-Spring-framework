@@ -2,6 +2,7 @@ package com.example.Tosovka_Spring_framework_.controllers;
 
 import java.security.Principal;
 
+import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -23,12 +24,15 @@ public class ProfileController {
     private final EventService eventService;
 
     @GetMapping("/profile/{username}")
-    public String profilePage(@PathVariable String username, Model model, Principal principal) {
+    public String profilePage(@PathVariable String username, Model model, Principal principal,
+            Authentication authentication) {
         User user = userService.getUserByUsername(username);
-        boolean isAuthenticated = principal != null;
-        String name = principal != null ? principal.getName() : "Гость";
+        boolean isAuthenticated = false;
+        if (authentication != null) {
+            model.addAttribute("username", authentication.getName());
+            isAuthenticated = true;
+        }
         model.addAttribute("isAuthenticated", isAuthenticated);
-        model.addAttribute("username", name);
         model.addAttribute("user", user);
         model.addAttribute("events", eventService.getByUserId(user.getId()));
         model.addAttribute("visits", visitService.getVisitsByUserId(user.getId()));

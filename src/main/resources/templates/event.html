@@ -4,7 +4,7 @@
 <head>
     <meta charset='utf-8'>
     <meta http-equiv='X-UA-Compatible' content='IE=edge'>
-    <title>Название иветна</title>
+    <title th:text="${event.title}"></title>
     <meta name='viewport' content='width=device-width, initial-scale=1'>
     <link rel='stylesheet' type='text/css' media='screen' href='../static/event.css'>
     <link rel='stylesheet' type='text/css' media='screen' href='../static/main.css'>
@@ -56,6 +56,12 @@
                     <input th:if="${isVisited}" th:href="@{'/visit/' + ${event.id} + '/delete'}" type="submit"
                         class="come-btn" value="Не пойду"></input>
                 </form>
+                <div class="author-nickname">Автор:  
+                    <a th:href="@{'/profile/' + ${event.user.username}}" th:text="${event.user.getUsername}"></a>
+                </div>
+                <form class="delete-event" th:if="${event.user.username == username}" th:action="@{'/event/' + ${event.id} + '/delete'}" method="post">
+                    <button type="submit">Удалить</button>
+                </form>
             </div>
         </div>
     </section>
@@ -66,10 +72,13 @@
             <h3>Комметарии</h3>
             <list th:each="comment : ${comments}">
                 <div class="comments-list">
-                    <p th:text="${comment.user.getUsername} + ' | '+ ${comment.getCommentText} + ' | ' + ${comment.getCommentDate}"></p>
+                    <p
+                        th:text="${comment.user.getUsername} + ' | '+ ${comment.getCommentText} + ' | ' + ${comment.getCommentDate}">
+                    </p>
                 </div>
             </list>
-            <form class="comments-form" th:if="${isAuthenticated}" th:action="@{'/comment/' + ${event.id} +'/post'}" method="post">
+            <form class="comments-form" th:if="${isAuthenticated}" th:action="@{'/comment/' + ${event.id} +'/post'}"
+                method="post">
                 <textarea name="comment" placeholder="Оставить комментарий" required></textarea>
                 <input type="submit" class="come-btn" value="Отправить"></input>
             </form>

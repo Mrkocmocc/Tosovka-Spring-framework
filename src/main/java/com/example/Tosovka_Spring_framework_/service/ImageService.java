@@ -9,6 +9,7 @@ import com.example.Tosovka_Spring_framework_.entity.Events;
 import com.example.Tosovka_Spring_framework_.entity.Images;
 import com.example.Tosovka_Spring_framework_.repositories.ImagesRepository;
 
+import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 
 @Service
@@ -26,6 +27,11 @@ public class ImageService {
         images.setImage(image);
         images.setUser(userService.getUserByPrincipal(principal));
         imagesRepository.save(images);
+    }
+
+    @Transactional
+    public void deleteImageByEventId(long id) {
+        imagesRepository.deleteByEventsId(id);
     }
 
 }
