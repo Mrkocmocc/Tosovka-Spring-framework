@@ -41,9 +41,10 @@ public class Events {
     @Basic
     @Column(name = "main_image", nullable = false)
     private byte[] mainImage;
-
+    
+    // TODO: change boolean name
     @Column(name = "is_active", nullable = false)
-    private boolean isActive;
+    private boolean activeEvent;
 
     @ManyToOne
     @JoinColumn(name = "user_id")

@@ -12,13 +12,13 @@ import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 public class MvcConfig implements WebMvcConfigurer {
 
     @Override
-    public void addViewControllers(org.springframework.web.servlet.config.annotation.ViewControllerRegistry registry) {
+    public void addViewControllers(@SuppressWarnings("null") org.springframework.web.servlet.config.annotation.ViewControllerRegistry registry) {
         registry.addViewController("/").setViewName("home");
         registry.addViewController("/login").setViewName("login");
     }
 
     @Override
-    public void addResourceHandlers(final ResourceHandlerRegistry registry)  {
+    public void addResourceHandlers(@SuppressWarnings("null") final ResourceHandlerRegistry registry)  {
         registry.addResourceHandler("/static/**")
                 .addResourceLocations("classpath:/static/");
     }

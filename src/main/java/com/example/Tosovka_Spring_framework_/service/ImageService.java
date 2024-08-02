@@ -7,6 +7,7 @@ import org.springframework.stereotype.Service;
 
 import com.example.Tosovka_Spring_framework_.entity.Events;
 import com.example.Tosovka_Spring_framework_.entity.Images;
+import com.example.Tosovka_Spring_framework_.mapper.UserMapper;
 import com.example.Tosovka_Spring_framework_.repositories.ImagesRepository;
 
 import jakarta.transaction.Transactional;
@@ -25,7 +26,7 @@ public class ImageService {
         Images images = new Images();
         images.setEvents(events);
         images.setImage(image);
-        images.setUser(userService.getUserByPrincipal(principal));
+        images.setUser(UserMapper.INSTANCE.toEntity(userService.getUserByPrincipal(principal)));
         imagesRepository.save(images);
     }
 

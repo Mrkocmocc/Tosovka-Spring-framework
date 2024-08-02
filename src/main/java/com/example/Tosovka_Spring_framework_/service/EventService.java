@@ -8,11 +8,11 @@ import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.multipart.MultipartFile;
 
+import com.example.Tosovka_Spring_framework_.dto.EventsDto;
 import com.example.Tosovka_Spring_framework_.entity.Events;
 import com.example.Tosovka_Spring_framework_.entity.Type;
+import com.example.Tosovka_Spring_framework_.mapper.EventsMapper;
 import com.example.Tosovka_Spring_framework_.repositories.EventsRepository;
 import com.example.Tosovka_Spring_framework_.repositories.TypeRepository;
 
@@ -34,25 +34,17 @@ public class EventService {
     @Autowired
     private final UserService userService;
 
-    public void saveEvent(String eventTitle, String eventDescription, LocalDate eventDate, String eventLocation,
-            Principal principal, @RequestParam("file") MultipartFile eventImage, String eventType) throws IOException {
-
+    public void saveEvent(EventsDto eventsDto, Principal principal, String eventType) throws IOException {
         Type type = typeRepository.findByName(eventType);
-        Events event = new Events();
-        event.setTitle(eventTitle);
-        event.setDescription(eventDescription);
-        event.setEventDate(eventDate);
-        event.setLocation(eventLocation);
-        event.setMainImage(eventImage.getBytes());
-        event.setUser(userService.getUserByPrincipal(principal));
+        eventsDto.setUser(userService.getUserByPrincipal(principal));
+        Events event = EventsMapper.INSTANCE.toEntity(eventsDto);
         event.setType(type);
 
         Events savedEvent = eventRepository.save(event);
-
-        imageService.saveImage(savedEvent, eventImage.getBytes(), principal);
+        imageService.saveImage(savedEvent, event.getMainImage(), principal);
     }
 
-    public List<Events> filterEvents(LocalDate dateFrom, LocalDate dateTo, String eventType, String eventTitle) {
+    public List<EventsDto> filterEvents(LocalDate dateFrom, LocalDate dateTo, String eventType, String eventTitle) {
         List<Events> events = eventRepository.findAll();
         if (eventTitle != null) {
             events = eventRepository.findByTitleContains(eventTitle);
@@ -62,7 +54,8 @@ public class EventService {
         return events.stream().filter(event -> dateFrom == null || event.getEventDate().isAfter(dateFrom))
                 .filter(event -> dateTo == null || event.getEventDate().isBefore(dateTo))
                 .filter(event -> eventType == null || event.getType().equals(type))
-                .filter(event -> event.isActive())
+                .filter(event -> event.isActiveEvent())
+                .map(EventsMapper.INSTANCE::toDto)
                 .collect(Collectors.toList());
     }
 
@@ -70,12 +63,12 @@ public class EventService {
         eventRepository.deleteById(id);
     }
 
-    public List<Events> getByUserId(long id) {
-        return eventRepository.findByUserId(id);
+    public List<EventsDto> getByUserId(long id) {
+        return eventRepository.findByUserId(id).stream().map(EventsMapper.INSTANCE::toDto).collect(Collectors.toList());
     }
 
-    public Events getEventById(Long id) {
-        return eventRepository.findById(id).orElse(null);
+    public EventsDto getEventById(Long id) {
+        return EventsMapper.INSTANCE.toDto(eventRepository.findById(id).orElse(null));
     }
 
 }

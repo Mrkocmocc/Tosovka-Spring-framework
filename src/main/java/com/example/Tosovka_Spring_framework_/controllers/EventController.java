@@ -18,8 +18,11 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.multipart.MultipartFile;
 
+import com.example.Tosovka_Spring_framework_.dto.CommentsDto;
+import com.example.Tosovka_Spring_framework_.dto.EventsDto;
 import com.example.Tosovka_Spring_framework_.entity.Events;
 import com.example.Tosovka_Spring_framework_.entity.Type;
+import com.example.Tosovka_Spring_framework_.mapper.EventsMapper;
 import com.example.Tosovka_Spring_framework_.service.CommentService;
 import com.example.Tosovka_Spring_framework_.service.EventService;
 import com.example.Tosovka_Spring_framework_.service.ImageService;
@@ -39,15 +42,19 @@ public class EventController {
     private final UserService userService;
     private final CommentService commentService;
 
-    @GetMapping("/create")
-    public String createPage(Model model, Principal principal, Authentication authentication) {
-        List<Type> types = typeService.getAllTypes();
+    public void setAuthentication(Model model, Authentication authentication) {
         boolean isAuthenticated = false;
         if (authentication != null) {
             model.addAttribute("username", authentication.getName());
             isAuthenticated = true;
         }
         model.addAttribute("isAuthenticated", isAuthenticated);
+    }
+
+    @GetMapping("/create")
+    public String createPage(Model model, Authentication authentication) {
+        List<Type> types = typeService.getAllTypes();
+        setAuthentication(model, authentication);
         model.addAttribute("types", types);
         return "create";
     }
@@ -58,12 +65,19 @@ public class EventController {
             @RequestParam("location") String location,
             @RequestParam("type") String type,
             Principal principal, @RequestParam("file") MultipartFile file) throws IOException {
-        eventService.saveEvent(title, description, eventDate, location, principal, file, type);
+
+        EventsDto eventsDto = new EventsDto();
+        eventsDto.setTitle(title);
+        eventsDto.setDescription(description);
+        eventsDto.setEventDate(eventDate);
+        eventsDto.setLocation(location);
+        eventsDto.setMainImage(file.getBytes());
+        eventService.saveEvent(eventsDto, principal, type);
         return "redirect:/";
     }
 
     @GetMapping("/image/{id}")
-    public ResponseEntity<?> getImage(@PathVariable long id) {
+    public ResponseEntity<InputStreamResource> getImage(@PathVariable long id) {
         return ResponseEntity.ok()
                 .body(new InputStreamResource(new ByteArrayInputStream(eventService.getEventById(id).getMainImage())));
     }
@@ -72,16 +86,13 @@ public class EventController {
     public String eventPage(@PathVariable long id, Model model, Principal principal, Authentication authentication) {
         boolean isVisited = principal != null && visitService.getVisitByEventIdAndUserId(id,
                 userService.getUserByPrincipal(principal).getId()) != null ? true : false;
-        boolean isAuthenticated = false;
-        if (authentication != null) {
-            model.addAttribute("username", authentication.getName());
-            isAuthenticated = true;
-        }
-        model.addAttribute("isAuthenticated", isAuthenticated);
+        setAuthentication(model, authentication);
+        EventsDto eventsDto = eventService.getEventById(id);
+        Events event = EventsMapper.INSTANCE.toEntity(eventsDto);
+        List<CommentsDto> commentsDto = commentService.getAllByEventId(event);
         model.addAttribute("isVisited", isVisited);
-        model.addAttribute("isAuthenticated", isAuthenticated);
         model.addAttribute("event", eventService.getEventById(id));
-        model.addAttribute("comments", commentService.getAllByEventId(eventService.getEventById(id)));
+        model.addAttribute("comments", commentsDto);
         return "event";
     }
 
@@ -103,17 +114,12 @@ public class EventController {
             type = null;
         if (title != null && title.equals(""))
             title = null;
-        boolean isAuthenticated = false;
-        if (authentication != null) {
-            model.addAttribute("username", authentication.getName());
-            isAuthenticated = true;
-        }
-        List<Events> events = eventService.filterEvents(dateFrom, dateTo, type, title);
+        setAuthentication(model, authentication);
+        List<EventsDto> events = eventService.filterEvents(dateFrom, dateTo, type, title);
         model.addAttribute("events", events);
         model.addAttribute("dateFrom", dateFrom);
         model.addAttribute("dateTo", dateTo);
         model.addAttribute("types", typeService.getAllTypes());
-        model.addAttribute("isAuthenticated", isAuthenticated);
         return "events";
     }
 

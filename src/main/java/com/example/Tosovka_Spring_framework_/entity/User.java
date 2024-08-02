@@ -38,6 +38,4 @@ public class User {
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "role_id", nullable = false, referencedColumnName = "role_id")
     private Role role;
-
-    // DOTO: add avatar column
 }

@@ -53,13 +53,13 @@
         </div>
         <div class="content-wrapper">
             <div id="profile-info" class="content">
-                <list id="event" class="events" th:each="event : ${events}">
+                <div id="event" class="events" th:each="event : ${events}">
                     <div class="card">
                         <div class="date"
                             th:text="${#temporals.format(event.eventDate, 'dd MMMM', new java.util.Locale('ru'))}">
                         </div>
                         <img th:src="@{'/image/' + ${event.id}}">
-                        <div class="type" th:text="${event.getEventType}"></div>
+                        <div class="type" th:text="${event.type.name}"></div>
                         <div class="title"><a th:href="@{/event/{id}(id=${event.id})}" th:text="${event.title}"></a>
                         </div>
                         <div class="location" th:text="${event.location}"></div>
@@ -67,23 +67,26 @@
                         <div class="creator"><a th:href="@{'/profile/' + ${event.user.username}}"
                                 th:text="${event.user.getUsername}"></a></div>
                     </div>
-                </list>
+                </div>
             </div>
 
-            <list id="visited-events" class="content" th:each="visits : ${visits}">
-                <div class="card">
-                    <div class="date"
-                        th:text="${#temporals.format(visits.eventDate, 'dd MMMM', new java.util.Locale('ru'))}">
+            <div id="visited-events" class="content">
+                <div id="event" class="events" th:each="visits : ${visits}">
+                    <div class="card">
+                        <div class="date"
+                            th:text="${#temporals.format(visits.eventDate, 'dd MMMM', new java.util.Locale('ru'))}">
+                        </div>
+                        <img th:src="@{'/image/' + ${visits.id}}">
+                        <div class="type" th:text="${visits.type.name}"></div>
+                        <div class="title"><a th:href="@{/event/{id}(id=${visits.id})}" th:text="${visits.title}"></a>
+                        </div>
+                        <div class="location" th:text="${visits.location}"></div>
+                        <div class="description" th:text="${visits.description}"></div>
+                        <div class="creator"><a th:href="@{'/profile/' + ${visits.user.username}}"
+                                th:text="${visits.user.getUsername}"></a></div>
                     </div>
-                    <img th:src="@{'/image/' + ${visits.id}}">
-                    <div class="type" th:text="${visits.getEventType}"></div>
-                    <div class="title"><a th:href="@{/event/{id}(id=${visits.id})}" th:text="${visits.title}"></a>
-                    </div>
-                    <div class="location" th:text="${visits.location}"></div>
-                    <div class="description" th:text="${visits.description}"></div>
-                    <div class="creator"><a th:href="@{'/profile/' + ${visits.user.username}}"
-                        th:text="${visits.user.getUsername}"></a></div>
-            </list>
+                </div>
+            </div>
         </div>
     </div>
 
@@ -97,15 +100,15 @@
                 <div class="column">
                     <h4>Навигация</h4>
                     <ul>
-                        <li><a href="#">Главная</a></li>
-                        <li><a href="#">Найти Ивент</a></li>
-                        <li><a href="#">Создать Ивент</a></li>
+                        <li><a th:href="@{/}">Главная</a></li>
+                        <li><a th:href="@{/search}">Найти Ивент</a></li>
+                        <li><a th:href="@{/create}">Создать Ивент</a></li>
                     </ul>
                 </div>
                 <div class="column">
                     <h4>Контакты</h4>
                     <ul>
-                        <li><a href="https://t.me/Num_Dominance">Telegram разработчика</a></li>
+                        <li><a href="https://t.me/ISnt_SUNday">Telegram разработчика</a></li>
                     </ul>
                 </div>
             </div>

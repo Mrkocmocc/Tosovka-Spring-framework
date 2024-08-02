@@ -9,6 +9,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
+import com.example.Tosovka_Spring_framework_.dto.UserDto;
 import com.example.Tosovka_Spring_framework_.service.UserService;
 
 import jakarta.servlet.http.HttpServletRequest;
@@ -48,7 +49,10 @@ public class UserController {
 
     @PostMapping("/register")
     public String registerPost(String username, String password, String email) {
-        if (!userService.saveUser(username, password, email)) {
+        UserDto userDto = new UserDto();
+        userDto.setUsername(username);
+        userDto.setEmail(email);
+        if (!userService.saveUser(userDto, password)) {
             return "redirect:/register?error=true";
         }
 

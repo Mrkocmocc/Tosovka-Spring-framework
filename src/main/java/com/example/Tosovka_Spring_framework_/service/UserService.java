@@ -6,8 +6,10 @@ import java.util.List;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import com.example.Tosovka_Spring_framework_.dto.UserDto;
 import com.example.Tosovka_Spring_framework_.entity.Role;
 import com.example.Tosovka_Spring_framework_.entity.User;
+import com.example.Tosovka_Spring_framework_.mapper.UserMapper;
 import com.example.Tosovka_Spring_framework_.repositories.RoleRepository;
 import com.example.Tosovka_Spring_framework_.repositories.UserRepository;
 
@@ -24,15 +26,13 @@ public class UserService {
         return userRepository.findAll();
     }
 
-    public boolean saveUser(String username, String password, String email) {
-        User user = new User();
+    public boolean saveUser(UserDto userDto, String password) {
+        User user = UserMapper.INSTANCE.toEntity(userDto);
         Role role = roleRepository.findByName("ROLE_USER");
-        if (userRepository.findByUsername(username) != null || userRepository.findByEmail(email) != null)
+        if (userRepository.findByUsername(user.getUsername()) != null || userRepository.findByEmail(user.getEmail()) != null)
             return false;
 
-        user.setUsername(username);
         user.setPassword(passwordEncoder.encode(password));
-        user.setEmail(email);
         user.setRole(role);
         userRepository.save(user);
         return true;
@@ -57,9 +57,9 @@ public class UserService {
         return userRepository.findByUsername(username);
     }
 
-    public User getUserByPrincipal(Principal principal) {
+    public UserDto getUserByPrincipal(Principal principal) {
         if (principal == null)
-            return new User();
-        return userRepository.findByUsername(principal.getName());
+            return new UserDto();
+        return UserMapper.INSTANCE.toDto((userRepository.findByUsername(principal.getName())));
     }
 }

@@ -38,7 +38,7 @@
 
             <div class="right-column">
                 <div class="event-description">
-                    <p class="event-type" th:text="${event.getEventType}">Тип ивента</p>
+                    <p class="event-type" th:text="${event.type.name}">Тип ивента</p>
                     <p class="event-date"
                         th:text="${#temporals.format(event.eventDate, 'dd MMMM', new java.util.Locale('ru'))}">Дата
                         ивента
@@ -104,7 +104,7 @@
                 <div class="column">
                     <h4>Контакты</h4>
                     <ul>
-                        <li><a href="https://t.me/Num_Dominance">Telegram разработчика</a></li>
+                        <li><a href="https://t.me/ISnt_SUNday">Telegram разработчика</a></li>
                     </ul>
                 </div>
             </div>

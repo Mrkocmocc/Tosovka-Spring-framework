@@ -48,12 +48,12 @@
 
 
         <div class="content">
-            <list th:each="event : ${events}">
+            <div th:each="event : ${events}">
                 <div class="card">
                     <div class="date"
                         th:text="${#temporals.format(event.eventDate, 'dd MMMM', new java.util.Locale('ru'))}"></div>
                     <img th:src="@{'/image/' + ${event.id}}">
-                    <div class="type" th:text="${event.getEventType}"></div>
+                    <div class="type" th:text="${event.type.name}"></div>
                     <div class="title"><a th:href="@{/event/{id}(id=${event.id})}"
                             th:text="${#strings.abbreviate(event.title, 58)}"></a> </div>
                     <div class="location" th:text="${#strings.abbreviate(event.location, 30)}"></div>

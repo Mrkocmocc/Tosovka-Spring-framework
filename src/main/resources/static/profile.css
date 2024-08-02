@@ -137,6 +137,11 @@
 }
 
 #profile-info {
-    display: flex;
+    display: block;
+    gap: 20px;
+}
+
+#visited-events {
+    display: none;
     gap: 20px;
 }
