@@ -59,7 +59,7 @@ public class EventService {
                 .collect(Collectors.toList());
     }
 
-    public void deleteEvent(Principal principal, long id) {
+    public void deleteEvent(long id) {
         eventRepository.deleteById(id);
     }
 
@@ -69,6 +69,10 @@ public class EventService {
 
     public EventsDto getEventById(Long id) {
         return EventsMapper.INSTANCE.toDto(eventRepository.findById(id).orElse(null));
+    }
+
+    public List<EventsDto> getAllEvents() {
+        return eventRepository.findAll().stream().map(EventsMapper.INSTANCE::toDto).collect(Collectors.toList());
     }
 
 }

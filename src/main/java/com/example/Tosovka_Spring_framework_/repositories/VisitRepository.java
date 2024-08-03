@@ -12,5 +12,7 @@ public interface VisitRepository extends JpaRepository<Visits, Long> {
 
     List<Visits> findByUserId(Long userId);
 
+    void deleteByEventsId(Long id);
+
     boolean existsByEventsIdAndUserId(Long eventId, Long userId);
 }

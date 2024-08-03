@@ -15,6 +15,7 @@ import com.example.Tosovka_Spring_framework_.mapper.EventsMapper;
 import com.example.Tosovka_Spring_framework_.mapper.UserMapper;
 import com.example.Tosovka_Spring_framework_.repositories.VisitRepository;
 
+import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 
 @Service
@@ -45,6 +46,11 @@ public class VisitService {
         if (visitRepository.existsByEventsIdAndUserId(eventId, user.getId())) {
             visitRepository.delete(getVisitByEventIdAndUserId(eventId, user.getId()));
         }
+    }
+
+    @Transactional
+    public void deleteAllVisitsByEventId(long eventId) {
+        visitRepository.deleteByEventsId(eventId);
     }
 
     public Visits getVisitByEventIdAndUserId(long eventId, long userId) {

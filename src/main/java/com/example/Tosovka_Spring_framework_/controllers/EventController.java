@@ -20,8 +20,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import com.example.Tosovka_Spring_framework_.dto.CommentsDto;
 import com.example.Tosovka_Spring_framework_.dto.EventsDto;
-import com.example.Tosovka_Spring_framework_.entity.Events;
-import com.example.Tosovka_Spring_framework_.entity.Type;
+import com.example.Tosovka_Spring_framework_.dto.TypeDto;
 import com.example.Tosovka_Spring_framework_.mapper.EventsMapper;
 import com.example.Tosovka_Spring_framework_.service.CommentService;
 import com.example.Tosovka_Spring_framework_.service.EventService;
@@ -42,80 +41,87 @@ public class EventController {
     private final UserService userService;
     private final CommentService commentService;
 
-    public void setAuthentication(Model model, Authentication authentication) {
-        boolean isAuthenticated = false;
-        if (authentication != null) {
+    @SuppressWarnings("null")
+    private void setAuthentication(Model model, Authentication authentication) {
+        boolean isAuthenticated = authentication != null;
+        if (isAuthenticated) {
             model.addAttribute("username", authentication.getName());
-            isAuthenticated = true;
         }
         model.addAttribute("isAuthenticated", isAuthenticated);
     }
 
     @GetMapping("/create")
     public String createPage(Model model, Authentication authentication) {
-        List<Type> types = typeService.getAllTypes();
+        List<TypeDto> types = typeService.getAllTypes();
         setAuthentication(model, authentication);
         model.addAttribute("types", types);
         return "create";
     }
 
     @PostMapping("/create")
-    public String saveEvent(@RequestParam("title") String title, @RequestParam("description") String description,
+    public String saveEvent(@RequestParam("title") String title,
+            @RequestParam("description") String description,
             @RequestParam("eventDate") @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate eventDate,
             @RequestParam("location") String location,
             @RequestParam("type") String type,
-            Principal principal, @RequestParam("file") MultipartFile file) throws IOException {
+            Principal principal,
+            @RequestParam("file") MultipartFile file) throws IOException {
 
-        EventsDto eventsDto = new EventsDto();
-        eventsDto.setTitle(title);
-        eventsDto.setDescription(description);
-        eventsDto.setEventDate(eventDate);
-        eventsDto.setLocation(location);
-        eventsDto.setMainImage(file.getBytes());
-        eventService.saveEvent(eventsDto, principal, type);
+        EventsDto eventDto = new EventsDto();
+        eventDto.setTitle(title);
+        eventDto.setDescription(description);
+        eventDto.setEventDate(eventDate);
+        eventDto.setLocation(location);
+        eventDto.setMainImage(file.getBytes());
+        eventService.saveEvent(eventDto, principal, type);
         return "redirect:/";
     }
 
-    @GetMapping("/image/{id}")
-    public ResponseEntity<InputStreamResource> getImage(@PathVariable long id) {
+    @GetMapping("/image/{eventId}")
+    public ResponseEntity<InputStreamResource> getImage(@PathVariable long eventId) {
+        EventsDto eventDto = eventService.getEventById(eventId);
         return ResponseEntity.ok()
-                .body(new InputStreamResource(new ByteArrayInputStream(eventService.getEventById(id).getMainImage())));
+                .body(new InputStreamResource(new ByteArrayInputStream(eventDto.getMainImage())));
     }
 
-    @GetMapping("/event/{id}")
-    public String eventPage(@PathVariable long id, Model model, Principal principal, Authentication authentication) {
-        boolean isVisited = principal != null && visitService.getVisitByEventIdAndUserId(id,
-                userService.getUserByPrincipal(principal).getId()) != null ? true : false;
+    @GetMapping("/event/{eventId}")
+    public String getEventPage(@PathVariable long eventId, Model model, Principal principal,
+            Authentication authentication) {
+        boolean isVisited = isEventVisited(eventId, principal);
         setAuthentication(model, authentication);
-        EventsDto eventsDto = eventService.getEventById(id);
-        Events event = EventsMapper.INSTANCE.toEntity(eventsDto);
-        List<CommentsDto> commentsDto = commentService.getAllByEventId(event);
+        EventsDto eventDto = eventService.getEventById(eventId);
+        List<CommentsDto> comments = commentService.getAllByEventId(EventsMapper.INSTANCE.toEntity(eventDto));
         model.addAttribute("isVisited", isVisited);
-        model.addAttribute("event", eventService.getEventById(id));
-        model.addAttribute("comments", commentsDto);
+        model.addAttribute("event", eventDto);
+        model.addAttribute("comments", comments);
         return "event";
     }
 
-    @PostMapping("/event/{id}/delete")
-    public String deleteEvent(@PathVariable long id, Principal principal) {
-        imageService.deleteImageByEventId(id);
-        eventService.deleteEvent(principal, id);
+    private boolean isEventVisited(long eventId, Principal principal) {
+        return principal != null && visitService.getVisitByEventIdAndUserId(eventId,
+                userService.getUserByPrincipal(principal).getId()) != null;
+    }
+
+    @PostMapping("/event/{eventId}/delete")
+    public String deleteEvent(@PathVariable long eventId, Principal principal) {
+        imageService.deleteImageByEventId(eventId);
+        visitService.deleteAllVisitsByEventId(eventId);
+        eventService.deleteEvent(eventId);
         return "redirect:/";
     }
 
     @GetMapping("/search")
-    public String searchPage(
+    public String searchEvents(
             @RequestParam(required = false, name = "dateFrom") @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate dateFrom,
             @RequestParam(required = false, name = "dateTo") @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate dateTo,
-            @RequestParam(required = false, name = "title") String title, String type,
+            @RequestParam(required = false, name = "title") String title,
+            @RequestParam(required = false, name = "type") String eventType,
             Model model, Authentication authentication) {
 
-        if (type != null && type.equals("Все"))
-            type = null;
-        if (title != null && title.equals(""))
-            title = null;
+        String filteredEventType = filterEventType(eventType);
+        String filteredTitle = filterTitle(title);
         setAuthentication(model, authentication);
-        List<EventsDto> events = eventService.filterEvents(dateFrom, dateTo, type, title);
+        List<EventsDto> events = eventService.filterEvents(dateFrom, dateTo, filteredEventType, filteredTitle);
         model.addAttribute("events", events);
         model.addAttribute("dateFrom", dateFrom);
         model.addAttribute("dateTo", dateTo);
@@ -123,4 +129,11 @@ public class EventController {
         return "events";
     }
 
+    private String filterEventType(String eventType) {
+        return eventType != null && eventType.equals("Все") ? null : eventType;
+    }
+
+    private String filterTitle(String title) {
+        return title != null && title.isEmpty() ? null : title;
+    }
 }

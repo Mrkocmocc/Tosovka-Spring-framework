@@ -41,7 +41,7 @@
             <label for="type">Тип мероприятия</label>
             <select id="type" name="type">
                 <option value="Все">Все</option>
-                <option th:each="types : ${types}" th:text="${types.getTypeName}"></option>
+                <option th:each="types : ${types}" th:text="${types.name}"></option>
             </select>
             <input type="submit" value="Применить">
         </form>

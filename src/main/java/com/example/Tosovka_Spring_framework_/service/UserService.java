@@ -49,12 +49,12 @@ public class UserService {
         return true;
     }
 
-    public User getUserById(long id) {
-        return userRepository.findById(id).get();
+    public UserDto getUserById(long id) {
+        return UserMapper.INSTANCE.toDto(userRepository.findById(id).get());
     }
 
-    public User getUserByUsername(String username) {
-        return userRepository.findByUsername(username);
+    public UserDto getUserByUsername(String username) {
+        return UserMapper.INSTANCE.toDto(userRepository.findByUsername(username));
     }
 
     public UserDto getUserByPrincipal(Principal principal) {

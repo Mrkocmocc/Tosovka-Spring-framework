@@ -8,7 +8,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 
-import com.example.Tosovka_Spring_framework_.entity.User;
+import com.example.Tosovka_Spring_framework_.dto.UserDto;
 import com.example.Tosovka_Spring_framework_.service.EventService;
 import com.example.Tosovka_Spring_framework_.service.UserService;
 import com.example.Tosovka_Spring_framework_.service.VisitService;
@@ -26,16 +26,16 @@ public class ProfileController {
     @GetMapping("/profile/{username}")
     public String profilePage(@PathVariable String username, Model model, Principal principal,
             Authentication authentication) {
-        User user = userService.getUserByUsername(username);
+        UserDto userDto = userService.getUserByUsername(username);
         boolean isAuthenticated = false;
         if (authentication != null) {
             model.addAttribute("username", authentication.getName());
             isAuthenticated = true;
         }
         model.addAttribute("isAuthenticated", isAuthenticated);
-        model.addAttribute("user", user);
-        model.addAttribute("events", eventService.getByUserId(user.getId()));
-        model.addAttribute("visits", visitService.getVisitsByUserId(user.getId()));
+        model.addAttribute("user", userDto);
+        model.addAttribute("events", eventService.getByUserId(userDto.getId()));
+        model.addAttribute("visits", visitService.getVisitsByUserId(userDto.getId()));
         return "profile";
     }
 }

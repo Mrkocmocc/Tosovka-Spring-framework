@@ -25,25 +25,25 @@ public class UserController {
 
     @GetMapping("/login")
     public String login(@RequestParam(value = "error", required = false) String error, Model model) {
-        if (error != null) {
+        if (error != null)
             model.addAttribute("error", true);
-        }
+
         return "login";
     }
 
     @GetMapping("/logout")
     public String logout(HttpServletRequest request, HttpServletResponse response, Authentication auth) {
-        if (auth != null) {
+        if (auth != null)
             new SecurityContextLogoutHandler().logout(request, response, auth);
-        }
+
         return "redirect:/";
     }
 
     @GetMapping("/register")
     public String register(@RequestParam(value = "error", required = false) String error, Model model) {
-        if (error != null) {
+        if (error != null)
             model.addAttribute("error", true);
-        }
+
         return "register";
     }
 
@@ -52,9 +52,8 @@ public class UserController {
         UserDto userDto = new UserDto();
         userDto.setUsername(username);
         userDto.setEmail(email);
-        if (!userService.saveUser(userDto, password)) {
+        if (!userService.saveUser(userDto, password))
             return "redirect:/register?error=true";
-        }
 
         return "redirect:/login";
     }
