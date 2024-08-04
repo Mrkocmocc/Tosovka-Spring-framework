@@ -58,27 +58,6 @@ body {
     width: 100%;
 }
 
-/* .btnLogin {
-    width: 100px;
-    height: 40px;
-    background: #28A745;
-    border: none;
-    outline: none;
-    border-radius: 6px;
-    cursor: pointer;
-    font-size: 1.1em;
-    color: rgb(255, 255, 255);
-    font-weight: 500;
-    margin-left: 20px;
-    margin-right: -40px;
-    transition: .5s
-}
-
-.btnLogin:hover {
-    background: #24973f;
-} */
-
-
 .footer {
     width: 100%;
     margin-top: 100px;
@@ -267,5 +246,12 @@ body {
 
 .image {
     width: 100%;
+    object-fit: cover;
     height: auto;
+}
+
+.image_blocks{
+    width: 100%;
+    object-fit: cover;
+    height: 320px;
 }
