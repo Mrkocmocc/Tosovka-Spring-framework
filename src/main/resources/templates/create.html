@@ -43,13 +43,12 @@
             <label for="eventDate">Дата проведения</label>
             <input type="date" id="eventDate" name="eventDate" required>
 
-            <!-- TODO: Сделать проверку на локацию -->
             <label for="eventLocation">Место проведения</label>
             <input type="text" id="location" name="location" required>
 
             <label for="eventImage">Тип ивента</label>
             <select id="type" name="type">
-                <option th:each="types : ${types}" th:text="${types.getTypeName}"></option>
+                <option th:each="types : ${types}" th:text="${types.name}"></option>
             </select>
 
             <label for="eventImage">Загрузите картинку</label>
